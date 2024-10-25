@@ -136,10 +136,6 @@ inline uint64_t EncodeDoubleToUInt64(double value) {
   }
 
   return result;
-
-  // uint64_t encodedValue;
-  // std::memcpy(&encodedValue, &value, sizeof(value));
-  // return encodedValue;
 }
 
 inline double DecodeDoubleFromUInt64(uint64_t value) {
@@ -153,9 +149,6 @@ inline double DecodeDoubleFromUInt64(uint64_t value) {
   __builtin_memcpy(&result, &value, sizeof(result));
 
   return result;
-  // double decodedValue;
-  // std::memcpy(&decodedValue, &value, sizeof(decodedValue));
-  // return decodedValue;
 }
 
 inline void EncodeSizedString(std::string* str, std::string& value) {
