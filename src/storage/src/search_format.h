@@ -39,6 +39,10 @@
 
 namespace storage {
 
+const static uint32_t kSingleEndHnswEdgePreSize = 2 + 1 + 4;
+const static uint32_t kHnswNodePreSize = 2 + 1 + 4;
+const static uint32_t kHnswEdgePreSize = 2 + 1 + 4 + 4;
+
 enum class VectorType : uint8_t {
   FLOAT64 = 1,
 };
@@ -342,7 +346,7 @@ inline std::string ConstructHnswLevelNodePrefix(uint16_t level) {
 // data kv key
 inline std::string ConstructHnswNode(uint16_t level, std::string& key) {
   std::string dst;
-  dst.resize(2 + 1 + 4 + key.size());
+  dst.resize(kHnswNodePreSize + key.size());
   char* offset = dst.data();
   EncodeFixed16(offset, level);
   offset += 2;
@@ -356,7 +360,7 @@ inline std::string ConstructHnswNode(uint16_t level, std::string& key) {
 
 inline std::string ConstructHnswEdgeWithSingleEnd(uint16_t level, std::string& key) {
   std::string dst;
-  dst.resize(2 + 1 + 4 + key.size());
+  dst.resize(kSingleEndHnswEdgePreSize + key.size());
   char* offset = dst.data();
   EncodeFixed16(offset, level);
   offset += 2;
@@ -370,7 +374,7 @@ inline std::string ConstructHnswEdgeWithSingleEnd(uint16_t level, std::string& k
 
 inline std::string ConstructHnswEdge(uint16_t level, std::string& key1, std::string& key2) {
   std::string dst;
-  dst.resize(2 + 1 + 4 + key1.size() + 4 + key2.size());
+  dst.resize(kHnswEdgePreSize + key1.size() + key2.size());
   char* offset = dst.data();
   EncodeFixed16(offset, level);
   offset += 2;
