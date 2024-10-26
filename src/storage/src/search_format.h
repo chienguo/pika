@@ -43,21 +43,6 @@ const static uint32_t kSingleEndHnswEdgePreSize = 2 + 1 + 4;
 const static uint32_t kHnswNodePreSize = 2 + 1 + 4;
 const static uint32_t kHnswEdgePreSize = 2 + 1 + 4 + 4;
 
-enum class VectorType : uint8_t {
-  FLOAT64 = 1,
-};
-
-enum class DistanceMetric : uint8_t {
-  L2 = 0,
-  IP = 1,
-  COSINE = 2,
-};
-
-enum class HnswLevelType : uint8_t {
-  NODE = 1,
-  EDGE = 2,
-};
-
 static const uint64_t kDefaultHnswMetaValueLength = sizeof(DataType) + sizeof(VectorType) + sizeof(DataType) +
                                                     sizeof(uint16_t) + sizeof(DistanceMetric) + 3 * sizeof(uint32_t) +
                                                     sizeof(double) + sizeof(uint16_t);
