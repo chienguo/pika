@@ -62,49 +62,4 @@ Status Redis::RemoveHnswEdge(std::string& edge_key) {
   return s;
 }
 
-Status Redis::HnswNodeDecodeNeighbours(std::string& node_key, uint16_t level, std::vector<std::string>& neighbours) {
-  neighbours.clear();
-  auto edge_prefix = ConstructHnswEdgeWithSingleEnd(level, node_key);
-  auto iter = db_->NewIterator(default_read_options_, handles_[kSearchDataCF]);
-  for (iter->Seek(edge_prefix); iter->Valid(); iter->Next()) {
-    if (!iter->key().starts_with(edge_prefix)) {
-      break;
-    }
-    auto neightbour_edge = iter->key();
-    neightbour_edge.remove_prefix(edge_prefix.size());
-    std::string neighbour;
-    DecodeSizedString(&neightbour_edge, &neighbour);
-    neighbours.push_back(neighbour);
-  }
-  delete iter;
-  return Status::OK();
-}
-
-Status Redis::HnswNodeAddNeighbour(std::string& node_key, uint16_t level, std::string& neighbour_key) {
-  auto edge_index_key = ConstructHnswEdge(level, node_key, neighbour_key);
-  Status s = db_->Put(default_write_options_, handles_[kSearchDataCF], edge_index_key, Slice());
-  if (s.ok()) {
-    HnswNodeMetaData metadata;
-    GetHnswNodeMetaData(node_key, level, metadata);
-    metadata.num_neighbours++;
-    PutHnswNodeMetaData(node_key, level, metadata);
-    return Status::OK();
-  }
-  return s;
-}
-
-Status Redis::HnswNodeRemoveNeighbour(std::string& node_key, uint16_t level, std::string& neighbour_key) {
-  auto edge_index_key = ConstructHnswEdge(level, node_key, neighbour_key);
-  Status s = db_->Delete(default_write_options_, handles_[kSearchDataCF], edge_index_key);
-  if (s.ok()) {
-    HnswNodeMetaData metadata;
-    GetHnswNodeMetaData(node_key, level, metadata);
-    metadata.num_neighbours--;
-    PutHnswNodeMetaData(node_key, level, metadata);
-    return Status::OK();
-  }
-
-  return Status::OK();
-}
-
 }  // namespace storage

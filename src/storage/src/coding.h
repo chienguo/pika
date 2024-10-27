@@ -122,35 +122,6 @@ inline uint64_t DecodeFixed64(const char* ptr) {
   }
 }
 
-inline uint64_t EncodeDoubleToUInt64(double value) {
-  uint64_t result = 0;
-
-  __builtin_memcpy(&result, &value, sizeof(value));
-
-  if ((result >> 63) == 1) {
-    // signed bit would be zero
-    result ^= 0xffffffffffffffff;
-  } else {
-    // signed bit would be one
-    result |= 0x8000000000000000;
-  }
-
-  return result;
-}
-
-inline double DecodeDoubleFromUInt64(uint64_t value) {
-  if ((value >> 63) == 0) {
-    value ^= 0xffffffffffffffff;
-  } else {
-    value &= 0x7fffffffffffffff;
-  }
-
-  double result = 0;
-  __builtin_memcpy(&result, &value, sizeof(result));
-
-  return result;
-}
-
 inline void EncodeSizedString(std::string* str, std::string& value) {
   char buf[4];
   EncodeFixed32(buf, value.size());

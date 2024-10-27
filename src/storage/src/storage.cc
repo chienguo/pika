@@ -1208,21 +1208,6 @@ Status Storage::RemoveHnswEdge(std::string& edge_key) {
   return inst->RemoveHnswEdge(edge_key);
 }
 
-Status Storage::HnswNodeDecodeNeighbours(std::string& node_key, uint16_t level, std::vector<std::string>& neighbours) {
-  auto& inst = GetDBInstance(node_key);
-  return inst->HnswNodeDecodeNeighbours(node_key, level, neighbours);
-}
-
-Status Storage::HnswNodeAddNeighbour(std::string& node_key, uint16_t level, std::string& neighbour_key) {
-  auto& inst = GetDBInstance(node_key);
-  return inst->HnswNodeAddNeighbour(node_key, level, neighbour_key);
-}
-
-Status Storage::HnswNodeRemoveNeighbour(std::string& node_key, uint16_t level, std::string& neighbour_key) {
-  auto& inst = GetDBInstance(node_key);
-  return inst->HnswNodeRemoveNeighbour(node_key, level, neighbour_key);
-}
-
 
 // Keys Commands
 int32_t Storage::Expire(const Slice& key, int64_t ttl_millsec) {
