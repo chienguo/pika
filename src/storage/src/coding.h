@@ -122,18 +122,6 @@ inline uint64_t DecodeFixed64(const char* ptr) {
   }
 }
 
-inline void EncodeSizedString(std::string* str, std::string& value) {
-  char buf[4];
-  EncodeFixed32(buf, value.size());
-  str->append(buf, sizeof(buf));
-  str->append(value);
-}
-
-inline void DecodeSizedString(rocksdb::Slice* input, std::string* value) {
-  uint32_t size = DecodeFixed32(input->data());
-  *value = std::string(input->data() + 4, size);
-  input->remove_prefix(size);
-}
 
 }  // namespace storage
 #endif  // SRC_CODING_H_
